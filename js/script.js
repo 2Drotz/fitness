@@ -245,7 +245,7 @@ window.addEventListener('DOMContentLoaded', (e) => {
          statusMessage.classList.add('status');
          statusMessage.textContent = message.load;
          form.append(statusMessage);
-
+//
 
          const request = new XMLHttpRequest();
          request.open('POST', 'server.php');
