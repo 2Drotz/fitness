@@ -307,6 +307,56 @@ window.addEventListener('DOMContentLoaded', (e) => {
 });
 
 
+// console.log('Запрос данных..');
+
+// const req = new Promise((resolve, reject) => {
+//    setTimeout(() => {
+//       console.log('GOGOGOGO');
+
+//       const product = {
+//          name: 'TV',
+//          price: 500
+//       }
+
+//       resolve(product);
+//    }, 2000);
+// });
+
+// req.then((product) => {
+//    return new Promise((resolve, reject) => {
+//       setTimeout(() => {
+//          product.status = true;
+//          resolve(product);
+//       }, 2000);
+//    });
+// }).then((product) => {
+//    product.mod = "done";
+//    return product;
+
+// }).then((data) => {
+//    console.log(data);
+// }).catch(() => {
+//    console.error('Плохо');
+// }).finally(() => {
+//    console.log('Final');
+// });
+
+
+const test = time => {
+   return new Promise(resolve => {
+      setTimeout(() => { resolve(), time });
+   });
+};
+
+// test(2000).then(() => console.log('1000 ms'));
+
+// Promise.all([test(2000), test(1000)]).then(() => {
+//    console.log('All');
+// });
+
+Promise.race([test(11000), test(5000)]).then(() => {
+   console.log('All');
+});
 
 // const urlObj = {
 //    protocol: 'https',
