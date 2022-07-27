@@ -194,37 +194,48 @@ window.addEventListener('DOMContentLoaded', (e) => {
       }
    }
 
-   new MenuCard(
-      'img/tabs/vegy.jpg',
-      'vegy',
-      'Меню "Фитнес"',
-      'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-      11,
-      '.menu .container',
+   const getResource = async (url) => {
+      let res = await fetch(url);
 
-   ).render();
+      if (!res.ok) {
+         throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+      }
 
-   new MenuCard(
-      'img/tabs/elite.jpg',
-      'elite',
-      'Меню “Премиум”',
-      'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-      12,
-      '.menu .container',
-      'menu__item',
-   ).render();
+      return await res.json();
+   };
 
-   new MenuCard(
-      'img/tabs/post.jpg',
-      'post',
-      'Меню "Постно1"',
-      'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
-      9,
-      '.menu .container',
-      'menu__item',
-   ).render();
 
    // Form
+   getResource('  http://localhost:3000/menu')
+      .then(data => {
+         data.forEach(({ img, altimg, title, descr, price }) => {
+            new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+         });
+      });
+
+   // getResource('  http://localhost:3000/menu')
+   //    .then(data => createCard(data));
+
+   // function createCard(data) {
+   //    data.forEach(({ img, altimg, title, descr, price }) => {
+   //       const element = document.createElement('div');
+   //       element.classList.add('menu-item');
+
+   //       element.innerHTML = `
+
+   //       <img src=${img} alt=${altimg} >
+   //       <h3 class="menu__item-subtitle">${title}</h3>
+   //       <div class="menu__item-descr">${descr}</div>
+   //       <div class="menu__item-divider"></div>
+   //       <div class="menu__item-price">
+   //          <div class="menu__item-cost">Цена:</div>
+   //          <div class="menu__item-total"><span>${price}</span> руб/день</div>
+   //       </div>
+   //          `;
+   //       document.querySelector('.menu . container').append(element);
+   //    });
+   // };
+
 
    const forms = document.querySelectorAll('form');
 
@@ -232,16 +243,27 @@ window.addEventListener('DOMContentLoaded', (e) => {
       load: 'img/form/spinner.svg',
       error: 'Что то не так',
       success: 'Все хорошо мы скоро пришлем ответ'
-   }
+   };
    forms.forEach((item) => {
-      postDate(item);
+      bindPostDate(item);
    });
 
-   function postDate(form) {
+   const postDate = async (url, data) => {
+      let res = await fetch(url, {
+         method: 'POST',
+         headers: {
+            'Content-type': 'application/json'
+         },
+         body: data
+      });
+      return await res.json();
+   };
+
+   function bindPostDate(form) {
       form.addEventListener('submit', (e) => {
          e.preventDefault();
 
-         const statusMessage = document.createElement('img');
+         let statusMessage = document.createElement('img');
          statusMessage.src = message.load;
          statusMessage.style.cssText = `
          display: block;
@@ -251,29 +273,18 @@ window.addEventListener('DOMContentLoaded', (e) => {
          //
          const formData = new FormData(form);
 
-         const object = {};
-         formData.forEach((value, key) => {
-            object[key] = value;
-         });
+         const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-
-         fetch('server.php', {
-            method: 'POST',
-            headers: {
-               'Content-type': 'apllication/json'
-            },
-            body: JSON.stringify(object)
-         }).then(data => data.text())
+         postDate('http://localhost:3000/requests', json)
             .then(data => {
                console.log(data);
                showThanksModal(message.success);
-
                statusMessage.remove();
             }).catch(() => {
-               showThanksModal(message.error);
+               showThanksModal(message.failure);
             }).finally(() => {
                form.reset();
-            })
+            });
       });
    }
 
@@ -303,16 +314,6 @@ window.addEventListener('DOMContentLoaded', (e) => {
       }, 4000);
    }
 
-
-   fetch('https://jsonplaceholder.typicode.com/posts', {
-      method: 'POST',
-      body: JSON.stringify({ name: "alex" }),
-      header: {
-         'Content-type': 'application/json'
-      }
-   })
-      .then(response => response.json())
-      .then(json => console.log(json));
 });
 
 
@@ -439,15 +440,37 @@ window.addEventListener('DOMContentLoaded', (e) => {
 // console.log(res);
 
 
-const obj = {
-   iven: 'persone',
-   ann: 'persone',
-   dog: 'animal',
-   cat: 'animal'
-};
+// const obj = {
+//    iven: 'persone',
+//    ann: 'persone',
+//    dog: 'animal',
+//    cat: 'animal'
+// };
 
-const newArray = Object.entries(obj)
-   .filter(item => item[1] === 'persone')
-   .map(item => item[0]);
-console.log(newArray);
+// const newArray = Object.entries(obj)
+//    .filter(item => item[1] === 'persone')
+//    .map(item => item[0]);
+// console.log(newArray);
 
+// const funds = [
+//    { amount: -1400 },
+//    { amount: 2400 },
+//    { amount: -1000 },
+//    { amount: 500 },
+//    { amount: 10400 },
+//    { amount: -11400 }
+// ];
+
+// const getPositiveIncomeAmount = (data) => {
+//    return data.filter(item => item.amount > 0)
+//       .reduce((sum, current) => (typeof (sum) === 'object' ? sum.amount : sum) + current.amount);
+// };
+// console.log(getPositiveIncomeAmount(funds));
+
+// const getTotalIncomeAmount = (data) => {
+//    return data.some(item => item.amount > 0)
+//       ? data.reduce((sum, current) => (typeof (sum) === 'object' ? sum.amount : sum) + current.amount)
+//       : getPositiveIncomeAmount(funds);
+// };
+
+// console.log(getTotalIncomeAmount(funds));
