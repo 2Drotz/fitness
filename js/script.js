@@ -249,33 +249,31 @@ window.addEventListener('DOMContentLoaded', (e) => {
          `;
          form.insertAdjacentElement('afterend', statusMessage);
          //
-
-         const request = new XMLHttpRequest();
-         request.open('POST', 'server.php');
-         request.setRequestHeader('Content-type', 'apllication/json');
-
          const formData = new FormData(form);
 
          const object = {};
-
          formData.forEach((value, key) => {
             object[key] = value;
          });
 
-         const json = JSON.stringify(object);
-         request.send(json);
 
-         request.addEventListener('load', () => {
-            if (request.status === 200) {
-               console.log(request.response);
+         fetch('server.php', {
+            method: 'POST',
+            headers: {
+               'Content-type': 'apllication/json'
+            },
+            body: JSON.stringify(object)
+         }).then(data => data.text())
+            .then(data => {
+               console.log(data);
                showThanksModal(message.success);
 
-               form.reset();
                statusMessage.remove();
-            } else {
+            }).catch(() => {
                showThanksModal(message.error);
-            }
-         });
+            }).finally(() => {
+               form.reset();
+            })
       });
    }
 
@@ -304,6 +302,17 @@ window.addEventListener('DOMContentLoaded', (e) => {
          closeModal();
       }, 4000);
    }
+
+
+   fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      body: JSON.stringify({ name: "alex" }),
+      header: {
+         'Content-type': 'application/json'
+      }
+   })
+      .then(response => response.json())
+      .then(json => console.log(json));
 });
 
 
@@ -342,11 +351,11 @@ window.addEventListener('DOMContentLoaded', (e) => {
 // });
 
 
-const test = time => {
-   return new Promise(resolve => {
-      setTimeout(() => { resolve(), time });
-   });
-};
+// const test = time => {
+//    return new Promise(resolve => {
+//       setTimeout(() => { resolve(), time });
+//    });
+// };
 
 // test(2000).then(() => console.log('1000 ms'));
 
@@ -354,9 +363,9 @@ const test = time => {
 //    console.log('All');
 // });
 
-Promise.race([test(11000), test(5000)]).then(() => {
-   console.log('All');
-});
+// Promise.race([test(11000), test(5000)]).then(() => {
+//    console.log('All');
+// });
 
 // const urlObj = {
 //    protocol: 'https',
@@ -388,4 +397,57 @@ Promise.race([test(11000), test(5000)]).then(() => {
 // console.log(clone);
 // console.log(stud);
 
+
+//--------------------------------------------------------------------------
+//FILTER
+// filter
+// const names = ['asd', 'ghgggg', 'retvvfsgsgvsf', 'mjyqe', 'dgh'];
+
+// const shortName = names.filter(function (name) {
+//    return name.length < 5;
+// });
+// console.log(shortName);
+
+
+// MAP
+// const answer = ['ADFfg', 'FDAdgsd', 'asdFF'];
+
+// const lower = answer.map(item =>  item.toLowerCase());
+
+// console.log(lower);
+
+
+//every/some
+
+// const array = [4, 2, 1];
+// console.log(array.every(item => typeof (item) === 'number'));
+
+// const arrays = [4, 'sdf', 'sdf23'];
+// console.log(arrays.some(item => typeof (item) === 'number'));
+
+//reduce
+
+// const arr = [3, 1, 5, 6, 7, 2];
+
+// const res = arr.reduce((sum, current) => sum + current);
+// console.log(res);
+
+
+// const arr = ['asdas', 'apple', 'dir'];
+
+// const res = arr.reduce((sum, current) => `${sum}, ${current}`);
+// console.log(res);
+
+
+const obj = {
+   iven: 'persone',
+   ann: 'persone',
+   dog: 'animal',
+   cat: 'animal'
+};
+
+const newArray = Object.entries(obj)
+   .filter(item => item[1] === 'persone')
+   .map(item => item[0]);
+console.log(newArray);
 
