@@ -432,6 +432,10 @@ window.addEventListener('DOMContentLoaded', (e) => {
          showActiveDots();
       });
    });
+
+   localStorage.setItem('number', 5);
+
+
    // showSlides(slideIndex);
 
    // if (slides.length < 10) {
