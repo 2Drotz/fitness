@@ -206,115 +206,121 @@ window.addEventListener('DOMContentLoaded', (e) => {
 
 
    // Form
-   getResource('  http://localhost:3000/menu')
+   // getResource('  http://localhost:3000/menu')
+   //    .then(data => {
+   //       data.forEach(({ img, altimg, title, descr, price }) => {
+   //          new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+   //       });
+   //    });
+
+   axios.get('  http://localhost:3000/menu')
       .then(data => {
-         data.forEach(({ img, altimg, title, descr, price }) => {
+         data.data.forEach(({ img, altimg, title, descr, price }) => {
             new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
          });
-      });
 
-   // getResource('  http://localhost:3000/menu')
-   //    .then(data => createCard(data));
+         // getResource('  http://localhost:3000/menu')
+         //    .then(data => createCard(data));
 
-   // function createCard(data) {
-   //    data.forEach(({ img, altimg, title, descr, price }) => {
-   //       const element = document.createElement('div');
-   //       element.classList.add('menu-item');
+         // function createCard(data) {
+         //    data.forEach(({ img, altimg, title, descr, price }) => {
+         //       const element = document.createElement('div');
+         //       element.classList.add('menu-item');
 
-   //       element.innerHTML = `
+         //       element.innerHTML = `
 
-   //       <img src=${img} alt=${altimg} >
-   //       <h3 class="menu__item-subtitle">${title}</h3>
-   //       <div class="menu__item-descr">${descr}</div>
-   //       <div class="menu__item-divider"></div>
-   //       <div class="menu__item-price">
-   //          <div class="menu__item-cost">Цена:</div>
-   //          <div class="menu__item-total"><span>${price}</span> руб/день</div>
-   //       </div>
-   //          `;
-   //       document.querySelector('.menu . container').append(element);
-   //    });
-   // };
+         //       <img src=${img} alt=${altimg} >
+         //       <h3 class="menu__item-subtitle">${title}</h3>
+         //       <div class="menu__item-descr">${descr}</div>
+         //       <div class="menu__item-divider"></div>
+         //       <div class="menu__item-price">
+         //          <div class="menu__item-cost">Цена:</div>
+         //          <div class="menu__item-total"><span>${price}</span> руб/день</div>
+         //       </div>
+         //          `;
+         //       document.querySelector('.menu . container').append(element);
+         //    });
+         // };
 
 
-   const forms = document.querySelectorAll('form');
+         const forms = document.querySelectorAll('form');
 
-   const message = {
-      load: 'img/form/spinner.svg',
-      error: 'Что то не так',
-      success: 'Все хорошо мы скоро пришлем ответ'
-   };
-   forms.forEach((item) => {
-      bindPostDate(item);
-   });
+         const message = {
+            load: 'img/form/spinner.svg',
+            error: 'Что то не так',
+            success: 'Все хорошо мы скоро пришлем ответ'
+         };
+         forms.forEach((item) => {
+            bindPostDate(item);
+         });
 
-   const postDate = async (url, data) => {
-      let res = await fetch(url, {
-         method: 'POST',
-         headers: {
-            'Content-type': 'application/json'
-         },
-         body: data
-      });
-      return await res.json();
-   };
+         const postDate = async (url, data) => {
+            let res = await fetch(url, {
+               method: 'POST',
+               headers: {
+                  'Content-type': 'application/json'
+               },
+               body: data
+            });
+            return await res.json();
+         };
 
-   function bindPostDate(form) {
-      form.addEventListener('submit', (e) => {
-         e.preventDefault();
+         function bindPostDate(form) {
+            form.addEventListener('submit', (e) => {
+               e.preventDefault();
 
-         let statusMessage = document.createElement('img');
-         statusMessage.src = message.load;
-         statusMessage.style.cssText = `
+               let statusMessage = document.createElement('img');
+               statusMessage.src = message.load;
+               statusMessage.style.cssText = `
          display: block;
          margin: 0 auto;
          `;
-         form.insertAdjacentElement('afterend', statusMessage);
-         //
-         const formData = new FormData(form);
+               form.insertAdjacentElement('afterend', statusMessage);
+               //
+               const formData = new FormData(form);
 
-         const json = JSON.stringify(Object.fromEntries(formData.entries()));
+               const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-         postDate('http://localhost:3000/requests', json)
-            .then(data => {
-               console.log(data);
-               showThanksModal(message.success);
-               statusMessage.remove();
-            }).catch(() => {
-               showThanksModal(message.failure);
-            }).finally(() => {
-               form.reset();
+               postDate('http://localhost:3000/requests', json)
+                  .then(data => {
+                     console.log(data);
+                     showThanksModal(message.success);
+                     statusMessage.remove();
+                  }).catch(() => {
+                     showThanksModal(message.failure);
+                  }).finally(() => {
+                     form.reset();
+                  });
             });
-      });
-   }
+         }
 
 
-   function showThanksModal(message) {
-      const prevModalDialog = document.querySelector('.modal__dialog');
+         function showThanksModal(message) {
+            const prevModalDialog = document.querySelector('.modal__dialog');
 
-      prevModalDialog.classList.add('hide');
+            prevModalDialog.classList.add('hide');
 
-      openModal();
+            openModal();
 
-      const thanksModal = document.createElement('div');
-      thanksModal.classList.add('modal__dialog');
-      thanksModal.innerHTML = `
+            const thanksModal = document.createElement('div');
+            thanksModal.classList.add('modal__dialog');
+            thanksModal.innerHTML = `
          <div class = "modal__content">
          <div class="modal__close" data-close>×</div>
          <div class = "modal__title">${message}</div>
          </div>
       `;
-      document.querySelector('.modal').append(thanksModal);
+            document.querySelector('.modal').append(thanksModal);
 
-      setTimeout(() => {
-         thanksModal.remove();
-         prevModalDialog.classList.add('show');
-         prevModalDialog.classList.remove('hide');
-         closeModal();
-      }, 4000);
-   }
+            setTimeout(() => {
+               thanksModal.remove();
+               prevModalDialog.classList.add('show');
+               prevModalDialog.classList.remove('hide');
+               closeModal();
+            }, 4000);
+         }
 
-});
+      });
 
 
 // console.log('Запрос данных..');
