@@ -580,22 +580,77 @@ window.addEventListener('DOMContentLoaded', (e) => {
    // });
 });
 
-const persone = {
-   name: 'Alex',
-   age: 19,
-
-   get userAge() {
-      return this.age;
-   },
-   set userAge(number) {
-      this.age = number;
-   }
-};
 
 
+// class Crirp {
+//    constructor(name, age, surname) {
+//       this.name = name;
+//       this._age = age;
+//    }
 
-console.log(persone.userAge = 30);
-console.log(persone.userAge);
+//    #surname = 'Ronaldo';
+
+//    say = () => {
+//       console.log(`Name ${this.name} ${this.#surname} age: ${this.age}`)
+//    }
+//    get surname() {
+//       return this.#surname;
+//    }
+//    set surname(surname) {
+//       this.#surname = #surname;
+
+//    }
+// }
+
+// const real = new Crirp('cristiano', 38, ronaldo);
+
+// console.log(real.surname);
+
+// class User {
+//    constructor(name, age) {
+//       this.name = name;
+//       this._age = age;
+//    }
+
+//    #surname = 'asdas'
+//    say() {
+//       console.log(`Nsme user ${this.name} ${this.#surname} age ${this._age}`);
+//    }
+
+
+//    get age() {
+//       return this._age;
+//    }
+//    set age(age) {
+//       if (typeof age === 'number' && age > 0 && age < 110) {
+//          this._age = age;
+//       } else {
+//          console.log('Noooooo~');
+//       }
+//    }
+// }
+
+// const ivan = new User('ivan', 21);
+// console.log(ivan._age);
+
+// ivan.say();
+
+// const persone = {
+//    name: 'Alex',
+//    age: 19,
+
+//    get userAge() {
+//       return this.age;
+//    },
+//    set userAge(number) {
+//       this.age = number;
+//    }
+// };
+
+
+
+// console.log(persone.userAge = 30);
+// console.log(persone.userAge);
 
 // console.log('Запрос данных..');
 
