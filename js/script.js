@@ -581,7 +581,27 @@ window.addEventListener('DOMContentLoaded', (e) => {
 });
 
 
+const number = 4;
 
+(function () {
+   let number = 3;
+   console.log(number);
+   console.log(number * 4);
+}());
+
+console.log(number);
+
+
+const num = (function () {
+   const privat = function () {
+      console.log('I am privat');
+   };
+   return {
+      sayHello: privat
+   };
+}());
+
+num.sayHello();
 // class Crirp {
 //    constructor(name, age, surname) {
 //       this.name = name;
